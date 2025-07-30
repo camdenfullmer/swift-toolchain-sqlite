@@ -31,7 +31,7 @@ let package = Package(
         .define("_WASI_EMULATED_SIGNAL", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_PROCESS_CLOCKS", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_GETPID", .when(platforms: [.wasi])),
-      ] + additionalCsettings,
+      ],
       linkerSettings: [
         .linkedLibrary("wasi-emulated-signal", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-process-clocks", .when(platforms: [.wasi])),
@@ -44,6 +44,9 @@ let package = Package(
       name: "SwiftToolchainCSQLite",
       path: "Sources/CSQLite",
       publicHeadersPath: "include",
+      cSettings: [
+        .define("SQLITE_ENABLE_FTS5"),
+      ],
       linkerSettings: [
         // Needed for swift_addNewDSOImage
         .linkedLibrary("swiftCore", .when(platforms: [.windows, .wasi]))
