@@ -2,10 +2,10 @@
 import PackageDescription
 import Foundation
 
-var additionalCsettings: [CSetting] = []
-//if ProcessInfo.processInfo.environment["SQLITE_ENABLE_FTS5"] == "1" {
-//    additionalCsettings.append(.define("SQLITE_ENABLE_FTS5"))
-//}
+var toolchainCSettings: [CSetting] = []
+if ProcessInfo.processInfo.environment["SQLITE_ENABLE_FTS5"] == "1" {
+    toolchainCSettings.append(.define("SQLITE_ENABLE_FTS5"))
+}
 
 let package = Package(
   name: "swift-toolchain-sqlite",
@@ -26,7 +26,6 @@ let package = Package(
         .define(
           "SQLITE_NOHAVE_SYSTEM",
           .when(platforms: [.macCatalyst, .iOS, .tvOS, .watchOS, .visionOS, .wasi])),
-        .define("SQLITE_ENABLE_FTS5"),
         .define("HAVE_READLINE", .when(platforms: [.macOS, .macCatalyst])),
         .define("_WASI_EMULATED_SIGNAL", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_PROCESS_CLOCKS", .when(platforms: [.wasi])),
@@ -44,9 +43,7 @@ let package = Package(
       name: "SwiftToolchainCSQLite",
       path: "Sources/CSQLite",
       publicHeadersPath: "include",
-      cSettings: [
-        .define("SQLITE_ENABLE_FTS5"),
-      ],
+      cSettings: toolchainCSettings,
       linkerSettings: [
         // Needed for swift_addNewDSOImage
         .linkedLibrary("swiftCore", .when(platforms: [.windows, .wasi]))
