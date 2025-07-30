@@ -3,11 +3,9 @@ import PackageDescription
 import Foundation
 
 var additionalCsettings: [CSetting] = []
-if ProcessInfo.processInfo.environment["SQLITE_ENABLE_FTS5"] == "1" {
-    additionalCsettings.append(.define("SQLITE_ENABLE_FTS5"))
-} else {
-    additionalCsettings.append(.define("SQLITE_OMIT_LOAD_EXTENSION"))
-}
+//if ProcessInfo.processInfo.environment["SQLITE_ENABLE_FTS5"] == "1" {
+//    additionalCsettings.append(.define("SQLITE_ENABLE_FTS5"))
+//}
 
 let package = Package(
   name: "swift-toolchain-sqlite",
@@ -24,9 +22,11 @@ let package = Package(
       name: "sqlite",
       dependencies: ["SwiftToolchainCSQLite"],
       cSettings: [
+        .define("SQLITE_OMIT_LOAD_EXTENSION"),
         .define(
           "SQLITE_NOHAVE_SYSTEM",
           .when(platforms: [.macCatalyst, .iOS, .tvOS, .watchOS, .visionOS, .wasi])),
+        .define("SQLITE_ENABLE_FTS5"),
         .define("HAVE_READLINE", .when(platforms: [.macOS, .macCatalyst])),
         .define("_WASI_EMULATED_SIGNAL", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_PROCESS_CLOCKS", .when(platforms: [.wasi])),
